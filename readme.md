@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎬 StreamBridge
+# 🎬 StreamBridge Proxied
 
 ### Bridge Your Emby Server to Stremio
 
@@ -9,7 +9,7 @@
 ![Node.js](https://img.shields.io/badge/node-%3E%3D14.0.0-brightgreen.svg)
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 
-**Stream media from your personal or shared Emby server directly in Stremio using IMDb, TMDb, Tvdb, or Anidb IDs.**
+**Stream media from your personal or shared Emby server through a MediaFlow proxy directly in Stremio using IMDb, TMDb, Tvdb, or Anidb IDs.**
 
 [Quick Start](#-quick-install) • [Features](#-features) • [Requirements](#-requirements) • [FAQ](#-faq) • [Deployment](#-addon-deployment-guide)
 
@@ -44,6 +44,7 @@
 - ✅ **Direct Play**: No transcoding required, streams directly from your server
 - ✅ **Multi-Quality Support**: Automatically handles different quality options
 - ✅ **Subtitle Support**: Automatic subtitle loading from your server
+- ✅ **MediaFlow Proxying**: Routes media and subtitle streams through a configured MediaFlow proxy
 - ✅ **Universal ID Support**: Works with IMDb, TMDb, Tvdb, and Anidb IDs
 
 ---
@@ -63,11 +64,12 @@
 
 ## ⚠️ Requirements
 
-Before installing StreamBridge, ensure you have:
+Before installing StreamBridge Proxied, ensure you have:
 
 - ✅ **Server URL**: Your Emby server can now use either of **HTTP or HTTPS**. But HTTP works only in **Stremio apps** (tested with desktop, iOS, Android TV). HTTP does **not** work in the  **browser** because browsers block mixed content (HTTPS page connecting to HTTP). HTTPS urls  works in all stremio variants.
 - ✅ **Public Access**: Your server must be accessible from the internet (private/local IPs like localhost or 192.168.x.x does not work).
 - ✅ **Server Credentials**: Your server username and password (not Emby Connect credentials)
+- ✅ **MediaFlow Proxy**: A reachable MediaFlow proxy URL, plus its API password if configured
 
 ## 📦 Quick Install
 

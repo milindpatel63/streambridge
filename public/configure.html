@@ -235,6 +235,16 @@ iframe[id*="kofi-wo-container"] {
         <label>Access Token / API Key</label>
         <input name="accessToken" required>
       </div>
+      <div class="field-group">
+        <label>MediaFlow Proxy URL</label>
+        <small>Example: https://proxy.example.com</small>
+        <input name="mediaflowUrl" placeholder="https://your-mediaflow-proxy.example.com" required>
+      </div>
+      <div class="field-group">
+        <label>MediaFlow API Password</label>
+        <small>Leave empty if your proxy does not require one</small>
+        <input name="mediaflowApiPassword" type="password">
+      </div>
     </div>
     
     <!-- New configuration options -->
@@ -517,10 +527,12 @@ $("#cfg").addEventListener("submit",e=>{
   cfg.serverUrl = serverUrlRaw ? serverUrlRaw.trim().replace(/\/+$/, "") : "";
   cfg.userId = formData.get("userId");
   cfg.accessToken = formData.get("accessToken");
+  cfg.mediaflowUrl = formData.get("mediaflowUrl") ? formData.get("mediaflowUrl").trim().replace(/\/+$/, "") : "";
+  cfg.mediaflowApiPassword = formData.get("mediaflowApiPassword") || "";
   
   // Validate required fields
-  if (!cfg.serverUrl || !cfg.userId || !cfg.accessToken) {
-    alert("❌ Please fill in all required fields (Server URL, User ID, and Access Token).");
+  if (!cfg.serverUrl || !cfg.userId || !cfg.accessToken || !cfg.mediaflowUrl) {
+    alert("❌ Please fill in all required fields (Server URL, User ID, Access Token, and MediaFlow Proxy URL).");
     return;
   }
   

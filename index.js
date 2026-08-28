@@ -19,6 +19,13 @@ require("dotenv").config();
 const PORT = process.env.PORT || 7000;
 const app  = express();
 
+function proxyUrl(mediaflowUrl, mediaflowApiPassword, destinationUrl) {
+  const proxy = new URL(mediaflowUrl.replace(/\/+$/, "") + "/proxy/stream");
+  proxy.searchParams.set("d", destinationUrl);
+  if (mediaflowApiPassword) proxy.searchParams.set("api_password", mediaflowApiPassword);
+  return proxy.toString();
+}
+
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -112,7 +119,9 @@ function baseManifest () {
     config: [
       { key: "serverUrl",   type: "text", title: "Server URL (Emby)",  required: true },
       { key: "userId",      type: "text", title: "User ID",     required: true },
-      { key: "accessToken", type: "text", title: "Access Token", required: true }
+      { key: "accessToken", type: "text", title: "Access Token", required: true },
+      { key: "mediaflowUrl", type: "text", title: "MediaFlow Proxy URL", required: true },
+      { key: "mediaflowApiPassword", type: "password", title: "MediaFlow API Password" }
     ]
   };
 }
@@ -230,7 +239,7 @@ app.get("/:cfg/stream/:type/:id.json", async (req, res) => {
   }
 
   const { id } = req.params;
-  if (!cfg.serverUrl || !cfg.userId || !cfg.accessToken)
+  if (!cfg.serverUrl || !cfg.userId || !cfg.accessToken || !cfg.mediaflowUrl)
     return res.json({ streams: [] });
 
   try {
@@ -261,9 +270,12 @@ app.get("/:cfg/stream/:type/:id.json", async (req, res) => {
         return {
           name: streamName, // Use custom stream name from config
           description: s.streamDescription || s.qualityTitle || "Direct Play", // Full detailed technical information
-          url: s.directPlayUrl,
+          url: proxyUrl(cfg.mediaflowUrl, cfg.mediaflowApiPassword, s.directPlayUrl),
           behaviorHints: behaviorHints,
-          subtitles: (cfg.includeSubtitles === false) ? [] : (s.subtitles || []) // Include subtitles unless user opted out
+          subtitles: (cfg.includeSubtitles === false) ? [] : (s.subtitles || []).map(sub => ({
+            ...sub,
+            url: proxyUrl(cfg.mediaflowUrl, cfg.mediaflowApiPassword, sub.url)
+          })) // Include subtitles unless user opted out
         };
       });
     // Set cache based on whether streams were found
