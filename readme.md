@@ -225,6 +225,13 @@ npm start
 # Server will be available at
 # http://localhost:7000/manifest.json
 ```
+
+### Docker
+
+```bash
+docker build -t streambridge-proxied .
+docker run -d --name streambridge-proxied -p 7000:7000 streambridge-proxied
+```
 ---
 ## 🛠 Tech Stack
 
